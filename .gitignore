@@ -1,6 +1,7 @@
 # @AngularClass
 
 .dev.*
+.vscode
 
 # Logs
 logs
