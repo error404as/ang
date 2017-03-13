@@ -1,0 +1,14 @@
+<div class="course-preview">
+	<div class="info">
+		<div class="meta">
+			<div class="name">{{course.name}}</div>
+			<div class="duration">{{course.duration}}</div>
+			<div class="pubdate">{{course.pubdate}}</div>
+		</div>
+		<div class="description">{{course.description}}</div>
+	</div>
+	<div class="side">
+		<button type="button" class="btn">Edit course</button>
+		<button type="button" class="btn" (click)="deleteCourse(course.id)">Delete</button>
+	</div>
+</div>

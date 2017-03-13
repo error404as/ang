@@ -1,0 +1,19 @@
+
+.course-preview {
+    display: flex;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #eee;
+
+    .info {
+        flex-grow: 1;
+
+        .meta {overflow: hidden; padding-bottom: 10px;}
+        .meta > div {float: left; padding-right: 15px;}
+        .meta .name {font-weight: bold;}
+        .meta .pubdate {float: right; padding-right: 0;}
+    }
+
+    .side {padding-left: 15px;}
+    .side .btn {display: block; width: 100%; margin-bottom: 15px;}
+}

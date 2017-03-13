@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Input } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
 	selector: 'find-course',
@@ -6,12 +6,12 @@ import { Component, ViewEncapsulation, Input } from '@angular/core';
 	encapsulation: ViewEncapsulation.None
 })
 export class FindCourseComponent {
-	//@Input() public todo: TodoItem;
+	public filterValue: string = '';
 
 	constructor() {
 	}
 
-	public filterCourses(val) {
-		console.log(val);
+	public filterCourses() {
+		console.log('Search for:', this.filterValue);
 	}
 }

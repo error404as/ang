@@ -15,7 +15,12 @@ export class CoursesComponent implements OnInit, OnDestroy {
 			name: 'Video course 1',
 			duration: '1h 30m',
 			pubdate: '2015-12-20',
-			description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis laudantium assumenda, animi veritatis beatae fugit perferendis enim aperiam quo sit odit officia, consectetur asperiores, voluptatum at placeat aut, odio repellat.'
+			description: `
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis
+				laudantium assumenda, animi veritatis beatae fugit perferendis enim
+				aperiam quo sit odit officia, consectetur asperiores, voluptatum at
+				placeat aut, odio repellat.
+				`
 
 		},
 		{
@@ -23,7 +28,12 @@ export class CoursesComponent implements OnInit, OnDestroy {
 			name: 'Video course 2',
 			duration: '28m',
 			pubdate: '2015-11-20',
-			description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis laudantium assumenda, animi veritatis beatae fugit perferendis enim aperiam quo sit odit officia, consectetur asperiores, voluptatum at placeat aut, odio repellat.'
+			description:  `
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis
+				laudantium assumenda, animi veritatis beatae fugit perferendis enim
+				aperiam quo sit odit officia, consectetur asperiores, voluptatum at
+				placeat aut, odio repellat.
+				`
 
 		},
 		{
@@ -31,7 +41,12 @@ export class CoursesComponent implements OnInit, OnDestroy {
 			name: 'Video course 3',
 			duration: '6h 5m',
 			pubdate: '2015-12-21',
-			description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis laudantium assumenda, animi veritatis beatae fugit perferendis enim aperiam quo sit odit officia, consectetur asperiores, voluptatum at placeat aut, odio repellat.'
+			description:  `
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis
+				laudantium assumenda, animi veritatis beatae fugit perferendis enim
+				aperiam quo sit odit officia, consectetur asperiores, voluptatum at
+				placeat aut, odio repellat.
+				`
 
 		}
 	];
@@ -40,9 +55,13 @@ export class CoursesComponent implements OnInit, OnDestroy {
 		console.log('Page courses constructor');
 	}
 
+	public deleteCourse($event) {
+		console.log('Delete: ', $event);
+	}
+
 	public ngOnInit() {
 		console.log('Page courses init');
-		console.log(this.courseItems)
+		console.log(this.courseItems);
 	}
 
 	public ngOnDestroy() {
