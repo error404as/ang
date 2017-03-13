@@ -30,6 +30,7 @@ import { HeaderModule, FooterModule } from './core/components';
 import { HomeModule } from './pages/home';
 import { PageOneModule } from  './pages/page-one';
 import { PageTwoModule } from  './pages/page-two';
+import { CoursesModule } from  './pages/courses';
 
 // Services
 
@@ -57,6 +58,7 @@ const APP_PROVIDERS = [
 		HeaderModule,
 		FooterModule,
 		HomeModule,
+		CoursesModule,
 		PageOneModule,
 		PageTwoModule
 	],

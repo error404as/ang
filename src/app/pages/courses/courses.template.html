@@ -1,0 +1,25 @@
+
+<div class="courses-controls">
+	<find-course></find-course>
+	<div class="side">
+		<button type="button" class="btn">Add course</button>
+	</div>
+</div>
+
+<div class="courses-list">
+	<div class="course-preview" *ngFor="let c of courseItems">
+		<div class="info">
+			<div class="meta">
+				<div class="name">{{c.name}}</div>
+				<div class="duration">{{c.duration}}</div>
+				<div class="pubdate">{{c.pubdate}}</div>
+			</div>
+			<div class="description">{{c.description}}</div>
+		</div>
+		<div class="side">
+			<button type="button" class="btn">Edit course</button>
+			<button type="button" class="btn">Delete</button>
+		</div>
+	</div>
+</div>
+
