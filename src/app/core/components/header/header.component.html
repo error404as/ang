@@ -1,11 +1,16 @@
 <nav class="main-navbar">
 	<div class="container">
-		<div class="logo"></div>
-		<div class="site-name">Courses Live Here</div>
+		<a href="#/">
+			<div class="logo"></div>
+			<div class="site-name">Courses Live Here</div>
+		</a>
 		<div class="unav">
 			<ul>
-				<li><a href="#/login" [routerLink]="'login'">login</a></li>
+				<li [(class.hidden)]="!isLoggedin">Hello, {{user.name}}</li>
+				<li [(class.hidden)]="!isLoggedin"><a href="#/" (click)="logOut()">logout</a></li>
+				<li [(class.hidden)]="isLoggedin"><a href="#/login" [routerLink]="'login'">login</a></li>
 			</ul>
+			
 		</div>
 		<!--
 		<div class="menu">

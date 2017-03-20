@@ -1,13 +1,13 @@
 <div class="login-form">
 	<div class="form-field">
 		<label>Login</label>
-		<input type="text">
+		<input type="text" #username>
 	</div>
 	<div class="form-field">
 		<label>Password</label>
 		<input type="password">
 	</div>
 	<div class="form-action">
-		<button class="btn-primary">Enter</button>
+		<button class="btn-primary" (click)="setUser(username.value)">Enter</button>
 	</div>
 </div>

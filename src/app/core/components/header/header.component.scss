@@ -6,6 +6,8 @@
 	overflow: hidden;
 	background-color: $c-primary;
 	color: $white;
+
+	a {color: $white;}
 }
 
 .logo {
@@ -31,7 +33,9 @@
 
 	li {list-style: none;}
 
-	a {color: $white; text-decoration: underline;}
+	a {text-decoration: underline;}
+
+	.hidden {display: none;}
 }
 
 .menu {
