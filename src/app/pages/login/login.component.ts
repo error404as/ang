@@ -1,19 +1,19 @@
 import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
-	selector: 'page-two',
+	selector: 'login',
 	encapsulation: ViewEncapsulation.None,
 	providers: [],
-	styles: [require('./page-two.styles.scss')],
-	template: require('./page-two.template.html')
+	styles: [require('./login.styles.scss')],
+	template: require('./login.template.html')
 })
-export class PageTwoComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
 	constructor() {
-		console.log('Page two constructor');
+		console.log('Page Login constructor');
 	}
 
 	public ngOnInit() {
-		console.log('Page two init');
+		console.log('Page login');
 	}
 
 	public ngOnDestroy() {

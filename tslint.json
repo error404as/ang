@@ -55,7 +55,7 @@
 			100
 		],
 		"indent": [
-			true,
+			false,
 			"tabs"
 		],
 		"no-string-literal": false,

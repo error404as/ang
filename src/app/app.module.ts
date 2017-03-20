@@ -29,16 +29,17 @@ import { HeaderModule, FooterModule } from './core/components';
 // Pages
 import { HomeModule } from './pages/home';
 import { PageOneModule } from  './pages/page-one';
-import { PageTwoModule } from  './pages/page-two';
+
+import { LoginModule } from  './pages/login';
 import { CoursesModule } from  './pages/courses';
 
 // Services
 
-import { TodoService } from './core/services';
+import { CoursesService } from './core/services';
 
 // Application wide providers
 const APP_PROVIDERS = [
-	TodoService
+	CoursesService
 ];
 
 /**
@@ -60,7 +61,7 @@ const APP_PROVIDERS = [
 		HomeModule,
 		CoursesModule,
 		PageOneModule,
-		PageTwoModule
+		LoginModule
 	],
 	providers: [ // expose our Services and Providers into Angular's dependency injection
 		ENV_PROVIDERS,
