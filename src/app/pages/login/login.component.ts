@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { LoginService } from '../../core/services';
 
@@ -10,12 +11,18 @@ import { LoginService } from '../../core/services';
 	template: require('./login.template.html')
 })
 export class LoginComponent implements OnInit, OnDestroy {
-	constructor(private loginService: LoginService) {
+	constructor(private loginService: LoginService, private router: Router) {
 		console.log('Page Login constructor');
+		if (loginService.isAuthenticated()) {
+			this.router.navigateByUrl('/');
+		}
 	}
 
-	public setUser(user: string) {
-		this.loginService.logIn(user);
+	public setUser(user: string, password: string) {
+		let result = this.loginService.logIn(user, password);
+		if (result) {
+			this.router.navigateByUrl('/');
+		}
 	}
 
 	public ngOnInit() {

@@ -1,29 +1,36 @@
 import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
 
-import { CoursesService } from '../../core/services';
+import { CoursesService, ModalService } from '../../core/services';
 import { CourseItem } from '../../core/entities';
 
 @Component({
-	selector: 'courses-list',
+	selector: 'courses',
 	encapsulation: ViewEncapsulation.None,
 	providers: [],
 	styles: [require('./courses.styles.scss')],
 	template: require('./courses.template.html')
 })
 export class CoursesComponent implements OnInit, OnDestroy {
+	public courseItems: CourseItem[];
 
-	public courseItems = [];
-
-	constructor(private coursesService: CoursesService) {
+	constructor(private coursesService: CoursesService, private modal: ModalService) {
 		console.log('Page courses constructor');
 	}
 
 	public deleteCourse($event) {
-		if (confirm('Do you really want to delete this course?')) {
-			// Burn in hell, Angular 2 !!!
-			this.coursesService.deleteCourse($event.courseId);
-			this.courseItems = this.coursesService.getCourses();
-		}
+		this.modal.open({
+			title: 'Confirm',
+			msg: 'Do you really want to delete this course?',
+			submit: () => {
+				this.coursesService.deleteCourse($event.courseId);
+				this.courseItems = this.coursesService.getCourses();
+			}
+		});
+	}
+
+	public updateCourse($event) {
+		this.coursesService.updateCourse($event.data);
+		this.courseItems = this.coursesService.getCourses();
 	}
 
 	public ngOnInit() {

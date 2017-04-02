@@ -1,12 +1,11 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
 	selector: 'find-course',
-	templateUrl: 'find-course.component.html',
-	encapsulation: ViewEncapsulation.None
+	templateUrl: 'find-course.component.html'
 })
 export class FindCourseComponent {
-	public filterValue: string = '';
+	public filterValue = '';
 
 	constructor() {
 	}

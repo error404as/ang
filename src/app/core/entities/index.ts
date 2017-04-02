@@ -1,2 +1,2 @@
-export * from './todoItem';
 export * from './courseItem';
+export * from './modalConfig';

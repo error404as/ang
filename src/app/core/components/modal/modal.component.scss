@@ -1,0 +1,27 @@
+@import "../../../styles/variables/colors.scss";
+
+.overlay {
+	position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+	background: rgba(#000, .6);
+}
+.content {
+	position: absolute; left: 50%; top: 50%;
+	width: 300px;
+	background: #fff;
+	transform: translate(-50%, -50%);
+
+	.btn-close {
+		position: absolute; top: 5px; right: 5px;
+	}
+	.head {
+		background: $c-primary;
+		padding: 20px;
+		color: #fff;
+	}
+	.body {
+		padding: 20px;
+	}
+	.action {
+		padding: 20px;
+	}
+}
