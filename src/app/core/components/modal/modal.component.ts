@@ -1,13 +1,15 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+import {
+	Component, ChangeDetectionStrategy, ChangeDetectorRef,
+	OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { ModalService } from '../../services';
 
 @Component({
 	selector: 'modal',
-	template: require('./modal.component.html'),
+	templateUrl: './modal.component.html',
 	styles: [require('./modal.component.scss')],
-	providers: []
+	changeDetection: ChangeDetectionStrategy.Default
 })
 export class ModalComponent implements OnInit, OnDestroy {
 	public visible = false;
@@ -16,7 +18,7 @@ export class ModalComponent implements OnInit, OnDestroy {
 
 	private subscription: Subscription;
 
-	constructor(private modalService: ModalService) {
+	constructor(private modalService: ModalService, private changeDetector: ChangeDetectorRef) {
 
 	}
 
@@ -37,6 +39,7 @@ export class ModalComponent implements OnInit, OnDestroy {
 			if (active) {
 				this.open();
 			}
+			this.changeDetector.markForCheck();
 		});
 	}
 

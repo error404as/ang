@@ -24,7 +24,7 @@ import { AppComponent } from './app.component';
 import { NoContentComponent } from './pages/no-content';
 
 // Components
-import { HeaderModule, FooterModule, ModalModule } from './core/components';
+import { HeaderModule, FooterModule, ModalModule, LoadingComponent } from './core/components';
 
 // Pages
 import { LoginModule } from  './pages/login';
@@ -32,13 +32,14 @@ import { CoursesModule } from  './pages/courses';
 
 // Services
 
-import { CoursesService, LoginService, ModalService } from './core/services';
+import { CoursesService, LoginService, ModalService, LoadingService } from './core/services';
 
 // Application wide providers
 const APP_PROVIDERS = [
 	CoursesService,
 	LoginService,
-	ModalService
+	ModalService,
+	LoadingService
 ];
 
 /**
@@ -48,6 +49,7 @@ const APP_PROVIDERS = [
 	bootstrap: [AppComponent],
 	declarations: [
 		AppComponent,
+		LoadingComponent,
 		NoContentComponent
 	],
 	imports: [ // import Angular's modules

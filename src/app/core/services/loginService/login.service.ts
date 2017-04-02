@@ -18,16 +18,16 @@ export class LoginService {
         }
     }
 
-    public logIn(name: string, password: string): boolean {
+    public logIn(name: string, password: string): void {
         console.log(`LoginService: ${name}/${password}`);
-        if (name && password) {
-            localStorage.setItem('login', name + '/' + password);
-            this.user = name;
-            this.authed.next(true);
-            return true;
-        } else {
-            return false;
-        }
+        setTimeout(() => {
+            if (name && password) {
+                localStorage.setItem('login', name + '/' + password);
+                this.user = name;
+                this.authed.next(true);
+            }
+
+        }, 500);
     }
 
     public logOut() {

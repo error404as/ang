@@ -1,4 +1,6 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+import {
+	Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef,
+	OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 import { LoginService } from '../../services';
@@ -8,14 +10,15 @@ import { LoginService } from '../../services';
 	templateUrl: 'header.component.html',
 	styles: [require('./header.component.scss')],
 	providers: [],
-	encapsulation: ViewEncapsulation.None
+	encapsulation: ViewEncapsulation.None,
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 	public subscription: Subscription;
 	public isLoggedin = false;
 	public user = {name: ''};
 
-	constructor(private loginService: LoginService) {
+	constructor(private loginService: LoginService, private changeDetector: ChangeDetectorRef) {
 
 	}
 
@@ -27,6 +30,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 		this.subscription = this.loginService.authed$.subscribe((isAuth) => {
 			this.isLoggedin = isAuth;
 			this.user = isAuth ? this.loginService.getUserInfo() : {name: ''};
+			this.changeDetector.markForCheck();
 		});
 	}
 

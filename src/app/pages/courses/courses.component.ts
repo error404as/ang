@@ -1,4 +1,7 @@
-import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+import {
+	Component, ViewEncapsulation, NgZone,
+	ChangeDetectionStrategy, ChangeDetectorRef,
+	OnInit, OnDestroy } from '@angular/core';
 
 import { CoursesService, ModalService } from '../../core/services';
 import { CourseItem } from '../../core/entities';
@@ -8,12 +11,28 @@ import { CourseItem } from '../../core/entities';
 	encapsulation: ViewEncapsulation.None,
 	providers: [],
 	styles: [require('./courses.styles.scss')],
-	template: require('./courses.template.html')
+	template: require('./courses.template.html'),
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CoursesComponent implements OnInit, OnDestroy {
 	public courseItems: CourseItem[];
+	private timer = null;
 
-	constructor(private coursesService: CoursesService, private modal: ModalService) {
+	constructor(
+		private coursesService: CoursesService,
+		private modal: ModalService,
+		private changeDetector: ChangeDetectorRef,
+		private ngZone: NgZone
+		) {
+
+		// ngZone shows nothing here..
+		this.ngZone.onUnstable.subscribe(() => {
+			this.timer = performance.now();
+		});
+		this.ngZone.onUnstable.subscribe(() => {
+			console.log('stable time: ' +  (performance.now() - this.timer));
+		});
+
 		console.log('Page courses constructor');
 	}
 
@@ -24,6 +43,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
 			submit: () => {
 				this.coursesService.deleteCourse($event.courseId);
 				this.courseItems = this.coursesService.getCourses();
+				this.changeDetector.markForCheck();
 			}
 		});
 	}
