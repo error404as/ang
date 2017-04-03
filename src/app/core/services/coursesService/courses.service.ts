@@ -8,9 +8,10 @@ export class CoursesService {
     private defaultCourses: CourseItem[] = [
         {
             id: 1,
-            name: 'Video course 1',
-            duration: '1h 30m',
-            pubdate: '2015-12-20',
+            name: 'HTTP',
+            duration: 90,
+            pubdate: new Date(new Date().getTime() - 864000000),
+            topRated: true,
             description: `
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis
                 laudantium assumenda, animi veritatis beatae fugit perferendis enim
@@ -20,9 +21,10 @@ export class CoursesService {
         },
         {
             id: 2,
-            name: 'Video course 2',
-            duration: '28m',
-            pubdate: '2015-11-20',
+            name: 'Promises',
+            duration: 28,
+            pubdate: new Date(new Date().getTime() - 518400000),
+            topRated: false,
             description: `
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis
                 laudantium assumenda, animi veritatis beatae fugit perferendis enim
@@ -32,14 +34,36 @@ export class CoursesService {
         },
         {
             id: 3,
-            name: 'Video course 3',
-            duration: '6h 5m',
-            pubdate: '2015-12-21',
+            name: 'Directives',
+            duration: 365,
+            pubdate: new Date(new Date().getTime() + 518400000),
+            topRated: true,
             description: `
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis
                 laudantium assumenda, animi veritatis beatae fugit perferendis enim
                 aperiam quo sit odit officia, consectetur asperiores, voluptatum at
                 placeat aut, odio repellat.
+                `
+        },
+        {
+            id: 4,
+            name: 'Dependency Injection',
+            duration: 365,
+            pubdate: new Date(2015, 10, 5),
+            topRated: false,
+            description: `
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis
+                laudantium assumenda, animi.
+                `
+        },
+        {
+            id: 5,
+            name: 'Component',
+            duration: 300,
+            pubdate: new Date(2015, 10, 5),
+            topRated: false,
+            description: `
+                Lorem consectetur asperiores, voluptatum at placeat aut, odio repellat.
                 `
         }
     ];

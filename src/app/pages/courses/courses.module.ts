@@ -11,11 +11,18 @@ import { CoursesComponent } from './courses.component';
 import { CoursePreviewComponent } from './course-preview/course-preview.component';
 import { FindCourseComponent } from './find-course/find-course.component';
 
+import { ViewBasedOnDateDirective } from '../../core/directives';
+import { FormatMinutesPipe, OrderByPipe, FilterByNamePipe } from '../../core/pipes';
+
 @NgModule({
 	declarations: [
 		CoursesComponent,
 		CoursePreviewComponent,
-		FindCourseComponent
+		FindCourseComponent,
+		ViewBasedOnDateDirective,
+		FormatMinutesPipe,
+		OrderByPipe,
+		FilterByNamePipe
 	],
 	imports: [
 		routes,

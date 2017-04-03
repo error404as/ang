@@ -1,11 +1,12 @@
 
 <div class="courses-controls">
-	<find-course></find-course>
+	<find-course (doFilter)="filterByNameField($event)"></find-course>
 	<div class="side">
 		<button type="button" class="btn">Add course</button>
 	</div>
 </div>
 
 <div class="courses-list">
-	<course-preview *ngFor="let item of courseItems" [course]="item" (deleteItem)="deleteCourse($event)" (updateItem)="updateCourse($event)"></course-preview>
+	<course-preview *ngFor="let item of courseItems | myOrderBy:'pubdate':true" [course]="item" (deleteItem)="deleteCourse($event)" (updateItem)="updateCourse($event)"></course-preview>
+	<div class="no-courses" *ngIf="!courseItems.length">Sorry, there are no awailable courses.</div>
 </div>

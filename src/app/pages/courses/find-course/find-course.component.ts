@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 
 @Component({
 	selector: 'find-course',
@@ -6,6 +6,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FindCourseComponent {
+	@Output() public doFilter = new EventEmitter();
 	public filterValue = '';
 
 	constructor() {
@@ -13,5 +14,7 @@ export class FindCourseComponent {
 
 	public filterCourses() {
 		console.log('Search for:', this.filterValue);
+		this.doFilter.emit({ q: this.filterValue });
 	}
+
 }

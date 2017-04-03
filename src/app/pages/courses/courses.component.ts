@@ -1,15 +1,17 @@
 import {
 	Component, ViewEncapsulation, NgZone,
 	ChangeDetectionStrategy, ChangeDetectorRef,
-	OnInit, OnDestroy } from '@angular/core';
+	OnInit, OnDestroy
+} from '@angular/core';
 
 import { CoursesService, ModalService } from '../../core/services';
 import { CourseItem } from '../../core/entities';
+import { FilterByNamePipe } from '../../core/pipes';
 
 @Component({
 	selector: 'courses',
 	encapsulation: ViewEncapsulation.None,
-	providers: [],
+	providers: [FilterByNamePipe],
 	styles: [require('./courses.styles.scss')],
 	template: require('./courses.template.html'),
 	changeDetection: ChangeDetectionStrategy.OnPush
@@ -20,17 +22,18 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
 	constructor(
 		private coursesService: CoursesService,
+		private filterNames: FilterByNamePipe,
 		private modal: ModalService,
 		private changeDetector: ChangeDetectorRef,
 		private ngZone: NgZone
-		) {
+	) {
 
 		// ngZone shows nothing here..
 		this.ngZone.onUnstable.subscribe(() => {
 			this.timer = performance.now();
 		});
 		this.ngZone.onUnstable.subscribe(() => {
-			console.log('stable time: ' +  (performance.now() - this.timer));
+			console.log('stable time: ' + (performance.now() - this.timer));
 		});
 
 		console.log('Page courses constructor');
@@ -51,6 +54,10 @@ export class CoursesComponent implements OnInit, OnDestroy {
 	public updateCourse($event) {
 		this.coursesService.updateCourse($event.data);
 		this.courseItems = this.coursesService.getCourses();
+	}
+
+	public filterByNameField($event) {
+		this.courseItems = this.filterNames.transform(this.coursesService.getCourses(), $event.q);
 	}
 
 	public ngOnInit() {

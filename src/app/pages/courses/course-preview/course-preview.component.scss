@@ -3,7 +3,14 @@
     display: flex;
     margin-bottom: 20px;
     padding: 10px;
-    border: 1px solid #eee;
+    border: 1px solid #ccc;
+
+    &.upcoming {
+        border-color: #15aee0;
+    }
+    &.fresh {
+        border-color: #1ccc1c;
+    }
 
     .info {
         flex-grow: 1;
@@ -12,6 +19,14 @@
         .meta > div {float: left; padding-right: 15px;}
         .meta .name {font-weight: bold;}
         .meta .pubdate {float: right; padding-right: 0;}
+    }
+
+    &.rated .meta .name:after {
+        margin-left: 5px;
+        content: '\2605';
+        color: #fd7a06;
+        font-size: 20px;
+        line-height: 1;
     }
 
     .side {padding-left: 15px;}
