@@ -30,7 +30,8 @@ import { FormatMinutesPipe, OrderByPipe, FilterByNamePipe } from '../../core/pip
 		ReactiveFormsModule,
 		CommonModule
 	],
-	providers: []
+	providers: [],
+	exports: [FormatMinutesPipe]
 })
 export class CoursesModule {
 	constructor() {

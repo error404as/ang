@@ -10,6 +10,6 @@ export class FormatMinutesPipe implements PipeTransform {
         } else if (minutes >= 60) {
             return Math.floor(minutes / 60) + 'h ' + (minutes % 60 ? minutes % 60 + 'm' : '');
         }
-        return minutes + '';
+        return minutes ? minutes + '' : '';
     }
 }

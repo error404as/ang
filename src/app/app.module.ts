@@ -29,17 +29,20 @@ import { HeaderModule, FooterModule, ModalModule, LoadingComponent } from './cor
 // Pages
 import { LoginModule } from  './pages/login';
 import { CoursesModule } from  './pages/courses';
+import { CourseEditModule } from  './pages/course-edit';
 
 // Services
 
 import { CoursesService, LoginService, ModalService, LoadingService } from './core/services';
+import { AuthGuard } from './core/guards';
 
 // Application wide providers
 const APP_PROVIDERS = [
 	CoursesService,
 	LoginService,
 	ModalService,
-	LoadingService
+	LoadingService,
+	AuthGuard
 ];
 
 /**
@@ -56,10 +59,11 @@ const APP_PROVIDERS = [
 		BrowserModule,
 		FormsModule,
 		HttpModule,
-		RouterModule.forRoot(ROUTES, {useHash: true, preloadingStrategy: PreloadAllModules}),
+		RouterModule.forRoot(ROUTES, {useHash: false, preloadingStrategy: PreloadAllModules}),
 		HeaderModule,
 		FooterModule,
 		CoursesModule,
+		CourseEditModule,
 		LoginModule,
 		ModalModule
 	],

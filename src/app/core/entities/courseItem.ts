@@ -4,7 +4,7 @@ export class CourseItem {
         public id: number,
         public name: string,
         public duration: number,
-        public pubdate: any,
+        public date: any,
         public topRated: boolean,
         public description: string
     ) {

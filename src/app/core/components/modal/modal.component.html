@@ -2,7 +2,7 @@
 	<div class="content">
 		<button class="btn-close" (click)="close()">&times;</button>
 		<div class="head">{{title}}</div>
-		<div class="body">{{message}}</div>
+		<div class="body" [innerHTML]="message"></div>
 		<div class="action">
 			<button class="btn-primary" (click)="submit()">Submit</button>
 			<button class="btn-secondary" (click)="close()">Cancel</button>

@@ -3,8 +3,9 @@ import {
 	ChangeDetectionStrategy, ChangeDetectorRef,
 	OnInit, OnDestroy
 } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
-import { CoursesService, ModalService } from '../../core/services';
+import { CoursesService, ModalService, LoginService } from '../../core/services';
 import { CourseItem } from '../../core/entities';
 import { FilterByNamePipe } from '../../core/pipes';
 
@@ -17,13 +18,18 @@ import { FilterByNamePipe } from '../../core/pipes';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CoursesComponent implements OnInit, OnDestroy {
+	public coursesObserver: Subscription;
+	public authObserver: Subscription;
 	public courseItems: CourseItem[];
+	public isLoggedin = false;
 	private timer = null;
+	private currentFilter: string = '';
 
 	constructor(
 		private coursesService: CoursesService,
 		private filterNames: FilterByNamePipe,
 		private modal: ModalService,
+		private loginService: LoginService,
 		private changeDetector: ChangeDetectorRef,
 		private ngZone: NgZone
 	) {
@@ -45,27 +51,39 @@ export class CoursesComponent implements OnInit, OnDestroy {
 			msg: 'Do you really want to delete this course?',
 			submit: () => {
 				this.coursesService.deleteCourse($event.courseId);
-				this.courseItems = this.coursesService.getCourses();
-				this.changeDetector.markForCheck();
+				this.filterByNameField();
 			}
 		});
 	}
 
 	public updateCourse($event) {
 		this.coursesService.updateCourse($event.data);
-		this.courseItems = this.coursesService.getCourses();
 	}
 
-	public filterByNameField($event) {
-		this.courseItems = this.filterNames.transform(this.coursesService.getCourses(), $event.q);
+	public filterByNameField($event?: {q: string}) {
+		if ($event) {
+			this.currentFilter = $event.q;
+		}
+		this.courseItems = this.filterNames.transform(
+			this.coursesService.getCourses(),
+			this.currentFilter
+		);
 	}
 
 	public ngOnInit() {
 		console.log('Page courses init');
-		this.courseItems = this.coursesService.getCourses();
+		this.coursesObserver = this.coursesService.allCourses$.subscribe((courses) => {
+			this.courseItems = courses;
+			this.changeDetector.markForCheck();
+		});
+		this.authObserver = this.loginService.authed$.subscribe((isAuth) => {
+			this.isLoggedin = isAuth;
+			this.changeDetector.markForCheck();
+		});
 	}
 
 	public ngOnDestroy() {
-		// unsubscribe here
+		this.coursesObserver.unsubscribe();
+		this.authObserver.unsubscribe();
 	}
 }

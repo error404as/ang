@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { CourseItem } from '../../entities';
 
 @Injectable()
 export class CoursesService {
+    public allCourses = new BehaviorSubject<CourseItem[]>([]);
+    public allCourses$ = this.allCourses.asObservable();
 
     private defaultCourses: CourseItem[] = [
         {
             id: 1,
             name: 'HTTP',
             duration: 90,
-            pubdate: new Date(new Date().getTime() - 864000000),
+            date: new Date(new Date().getTime() - 864000000),
             topRated: true,
             description: `
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis
@@ -23,7 +26,7 @@ export class CoursesService {
             id: 2,
             name: 'Promises',
             duration: 28,
-            pubdate: new Date(new Date().getTime() - 518400000),
+            date: new Date(new Date().getTime() - 518400000),
             topRated: false,
             description: `
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis
@@ -36,7 +39,7 @@ export class CoursesService {
             id: 3,
             name: 'Directives',
             duration: 365,
-            pubdate: new Date(new Date().getTime() + 518400000),
+            date: new Date(new Date().getTime() + 518400000),
             topRated: true,
             description: `
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis
@@ -49,7 +52,7 @@ export class CoursesService {
             id: 4,
             name: 'Dependency Injection',
             duration: 365,
-            pubdate: new Date(2015, 10, 5),
+            date: new Date(2015, 10, 5),
             topRated: false,
             description: `
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis
@@ -60,7 +63,7 @@ export class CoursesService {
             id: 5,
             name: 'Component',
             duration: 300,
-            pubdate: new Date(2015, 10, 5),
+            date: new Date(2015, 10, 5),
             topRated: false,
             description: `
                 Lorem consectetur asperiores, voluptatum at placeat aut, odio repellat.
@@ -69,19 +72,17 @@ export class CoursesService {
     ];
 
     constructor() {
+        this.allCourses.next(this.defaultCourses);
     }
 
-    public createCourse(course: CourseItem): number {
-        let id = 1;
+    public createCourse(course: CourseItem): Promise<number> {
         let courses = this.getCourses();
-        if (courses.length) {
-            id = courses.map((itm) => itm.id).reduce((a, b) => Math.max(a, b)) + 1;
-        }
-        course.id = id;
+        let nextId = courses.length ? Math.max(...courses.map((itm) => itm.id)) + 1 : 0;
+        course.id = nextId;
         return this.addCourse(course);
     }
     public getCourses(): CourseItem[] {
-        return this.defaultCourses;
+        return this.allCourses.getValue();
     }
     public getById(id: number): CourseItem[] {
         return this.getCourses().filter((itm) => itm.id === id);
@@ -93,12 +94,20 @@ export class CoursesService {
         }
     }
     public deleteCourse(id: number) {
-        this.defaultCourses = this.getCourses().filter((itm) => itm.id !== id);
+        let courses = this.getCourses().filter((itm) => itm.id !== id);
+        this.allCourses.next(courses);
     }
 
-    private addCourse(course: CourseItem): number {
-        this.defaultCourses.push(course);
-        return course.id;
+    private addCourse(course: CourseItem): Promise<number> {
+        return new Promise((resolve) => {
+            console.log('Adding course...');
+            setTimeout(() => {
+                let courses = this.getCourses();
+                courses.push(course);
+                this.allCourses.next(courses);
+                resolve(course.id);
+            }, 500);
+        });
     }
 
 }

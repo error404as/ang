@@ -1,13 +1,13 @@
-<div class="course-preview" [viewBasedOnDate]="course.pubdate" [ngClass]="{rated: course.topRated}">
+<div class="course-preview" [viewBasedOnDate]="course.date" [ngClass]="{rated: course.topRated}">
 	<div class="info">
 		<div class="meta">
 			<div class="name" [title]="course.topRated ? 'Top rated course' : ''">{{course.name | uppercase}}</div>
 			<div class="duration">{{course.duration | myFormatMinutes}}</div>
-			<div class="pubdate">{{course.pubdate | date: 'dd.MM.yyyy'}}</div>
+			<div class="pubdate">{{course.date | date: 'dd.MM.yyyy'}}</div>
 		</div>
 		<div class="description">{{course.description}}</div>
 	</div>
-	<div class="side">
+	<div class="side" *ngIf="isLoggedin">
 		<button type="button" class="btn" (click)="updateCourse(course)">Edit course</button>
 		<button type="button" class="btn" (click)="deleteCourse(course.id)">Delete</button>
 	</div>

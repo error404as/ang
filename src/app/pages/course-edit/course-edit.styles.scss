@@ -1,0 +1,21 @@
+﻿.course-form {
+	.form-field {
+		padding-left: 200px;
+		padding-bottom: 10px;
+
+		> label {
+			float: left;
+			width: 190px;
+			margin-left: -200px;
+			text-align: right;
+		}
+		input[type="text"],
+		textarea,
+		select {
+			width: 300px;
+		}
+	}
+	.form-action {
+		padding-left: 200px;
+	}
+}
