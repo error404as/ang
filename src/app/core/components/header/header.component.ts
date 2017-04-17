@@ -16,7 +16,7 @@ import { LoginService } from '../../services';
 export class HeaderComponent implements OnInit, OnDestroy {
 	public subscription: Subscription;
 	public isLoggedin = false;
-	public user = {name: ''};
+	public username = '';
 
 	constructor(private loginService: LoginService, private changeDetector: ChangeDetectorRef) {
 
@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 	public ngOnInit() {
 		this.subscription = this.loginService.authed$.subscribe((isAuth) => {
 			this.isLoggedin = isAuth;
-			this.user = isAuth ? this.loginService.getUserInfo() : {name: ''};
+			this.username = this.loginService.username;
 			this.changeDetector.markForCheck();
 		});
 	}

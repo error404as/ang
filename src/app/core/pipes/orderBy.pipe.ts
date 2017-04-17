@@ -5,6 +5,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class OrderByPipe implements PipeTransform {
     public transform(items: any[], field: string, revers: boolean): any[] {
+        if (typeof items !== 'object' || !Array.isArray(items)) {
+            return items;
+        }
         let result = items.sort((a, b) => {
             if (typeof a[field] === 'string' && typeof b[field] === 'string') {
                 if (a[field].toLowerCase() < b[field].toLowerCase()) { return -1; }

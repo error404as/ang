@@ -1,4 +1,4 @@
-<div class="course-preview" [viewBasedOnDate]="course.date" [ngClass]="{rated: course.topRated}">
+<div class="course-preview" [viewBasedOnDate]="course.date" [ngClass]="{rated: course.isTopRated}">
 	<div class="info">
 		<div class="meta">
 			<div class="name" [title]="course.topRated ? 'Top rated course' : ''">{{course.name | uppercase}}</div>

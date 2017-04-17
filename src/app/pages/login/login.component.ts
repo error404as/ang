@@ -30,9 +30,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	public setUser(user: string, password: string) {
+	public login(user: string, password: string) {
 		this.loading.open();
-		this.loginService.logIn(user, password);
+		this.loginService.logInServer(user, password).subscribe((res) => {
+			console.log(res);
+			this.loading.close();
+			this.router.navigateByUrl('/');
+		}, (err) => {
+			console.log(err);
+			alert('Sorry, dear user. Please try again.');
+			this.loading.close();
+		});
 	}
 
 	public ngOnInit() {

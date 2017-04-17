@@ -5,7 +5,7 @@ import {
 import { Router } from '@angular/router';
 
 import { CoursesService, LoadingService, ModalService } from '../../core/services';
-import { CourseItem } from '../../core/entities';
+import { CourseItem2 } from '../../core/entities';
 
 @Component({
 	selector: 'course-edit',
@@ -53,12 +53,12 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 			}
 		}
 
-		let course: CourseItem = {
+		let course: CourseItem2 = {
 			id: 0,
 			name: this.name || '',
-			duration: this.duration || 0,
+			length: this.duration || 0,
 			date: this.date ? new Date(this.date) : new Date(),
-			topRated: false,
+			isTopRated: false,
 			description: this.description || ''
 		};
 		console.log('Saving Course');

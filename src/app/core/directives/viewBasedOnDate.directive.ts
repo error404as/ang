@@ -11,7 +11,7 @@ export class ViewBasedOnDateDirective implements OnInit {
 
     public ngOnInit() {
         let current = new Date().getTime();
-        let date = this.viewBasedOnDate.getTime();
+        let date = new Date(this.viewBasedOnDate).getTime();
         if (current < date) {
             this.el.nativeElement.classList.add('upcoming');
         } else if (current - date <= 14 * 24 * 60 * 60 * 1000) {

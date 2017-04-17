@@ -4,7 +4,7 @@ import { Component, Input, Output, EventEmitter,
 import { Subscription } from 'rxjs/Subscription';
 
 import { LoginService } from '../../../core/services';
-import { CourseItem } from '../../../core/entities';
+import { CourseItem, CourseItem2 } from '../../../core/entities';
 
 @Component({
 	selector: 'course-preview',
@@ -15,18 +15,14 @@ import { CourseItem } from '../../../core/entities';
 export class CoursePreviewComponent implements OnInit, OnDestroy {
 	public subscription: Subscription;
 	public isLoggedin = false;
-	@Input() public course: CourseItem;
+	@Input() public course: CourseItem2;
 	@Output() public deleteItem = new EventEmitter();
 	@Output() public updateItem = new EventEmitter();
-
-	private count = 0;
 
 	constructor(private loginService: LoginService, private changeDetector: ChangeDetectorRef) {
 	}
 
-	public updateCourse(course: CourseItem) {
-		course.name += ' ' + this.count;
-		this.count++;
+	public updateCourse(course: CourseItem2) {
 		this.updateItem.emit({ data: course });
 	}
 

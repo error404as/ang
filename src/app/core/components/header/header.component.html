@@ -6,19 +6,10 @@
 		</a>
 		<div class="unav">
 			<ul>
-				<li [(class.hidden)]="!isLoggedin">Hello, {{user.name}}</li>
+				<li [(class.hidden)]="!isLoggedin">Hello, {{username}}</li>
 				<li [(class.hidden)]="!isLoggedin"><a href="/" (click)="logOut()" [routerLink]="'logout'">logout</a></li>
 				<li [(class.hidden)]="isLoggedin"><a href="/login" [routerLink]="'login'">login</a></li>
 			</ul>
-			
 		</div>
-		<!--
-		<div class="menu">
-			<div class="menu-item" [routerLink]="'home'" routerLinkActive="active">Home</div>
-			<div class="menu-item" [routerLink]="'pageone'" routerLinkActive="active">Page 1</div>
-			<div class="menu-item" [routerLink]="'pagetwo'" routerLinkActive="active">Page 2</div>
-			<div class="menu-item" [routerLink]="'courses'" routerLinkActive="active">Courses</div>
-		</div>
-		-->
 	</div>
 </nav>

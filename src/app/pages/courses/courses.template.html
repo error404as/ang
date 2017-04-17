@@ -6,7 +6,15 @@
 	</div>
 </div>
 
+<div class="pager">
+	<button [disabled]="currPage === 0" (click)="getPrev()">&lt; Prev</button>
+	<button [disabled]="!hasNext" (click)="getNext()">Next &gt;</button>
+</div>
 <div class="courses-list">
 	<course-preview *ngFor="let item of courseItems | myOrderBy:'date':true" [course]="item" (deleteItem)="deleteCourse($event)" (updateItem)="updateCourse($event)"></course-preview>
 	<div class="no-courses" *ngIf="!courseItems.length">Sorry, there are no awailable courses.</div>
+</div>
+<div class="pager">
+	<button [disabled]="currPage === 0" (click)="getPrev()">&lt; Prev</button>
+	<button [disabled]="!hasNext" (click)="getNext()">Next &gt;</button>
 </div>
