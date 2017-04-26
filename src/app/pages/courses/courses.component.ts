@@ -54,9 +54,7 @@ export class CoursesComponent implements OnInit, OnDestroy {
 			title: 'Confirm',
 			msg: 'Do you really want to delete this course?',
 			submit: () => {
-				alert('Nope!');
-				// this.coursesService.deleteCourse($event.courseId);
-				// this.filterByNameField();
+				this.coursesService.deleteCourse($event.courseId);
 			}
 		});
 	}
@@ -69,21 +67,25 @@ export class CoursesComponent implements OnInit, OnDestroy {
 	public filterByNameField($event?: {q: string}) {
 		if ($event) {
 			this.currentFilter = $event.q;
+			this.loading.open();
+			this.coursesService.getFilteredByName($event.q);
 		}
+		/*
 		this.courseItems = this.filterNames.transform(
 			this.courseItems,
 			this.currentFilter
 		);
+		*/
 	}
 
 	public getPrev() {
 		this.loading.open();
-		this.coursesService.getPrev();
+		this.coursesService.getPrev(this.currentFilter);
 	}
 
 	public getNext() {
 		this.loading.open();
-		this.coursesService.getNext();
+		this.coursesService.getNext(this.currentFilter);
 	}
 
 	public ngOnInit() {
@@ -97,6 +99,11 @@ export class CoursesComponent implements OnInit, OnDestroy {
 				this.courseItems = courses.items;
 			} else {
 				this.hasNext = false;
+
+				if (courses.page === 0) {
+					this.currPage = courses.page;
+					this.courseItems = courses.items;
+				}
 			}
 			this.changeDetector.markForCheck();
 		});
