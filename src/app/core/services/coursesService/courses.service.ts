@@ -10,6 +10,8 @@ import 'rxjs/add/operator/map';
 
 import { CourseItem2, CoursesList } from '../../entities';
 
+import { AuthHeader } from '../../services';
+
 @Injectable()
 export class CoursesService {
     public courses = new BehaviorSubject<CoursesList>({ page: 0, items: [] });
@@ -18,9 +20,12 @@ export class CoursesService {
     private currPage = 0;
     private perpage = 5;
 
-    private url: string = 'http://localhost:3010/courses'; // 'http://178.62.199.58:3010/courses';
+    private url: string = 'http://178.62.199.58:3010/courses';
 
-    constructor(private http: Http) {
+    constructor(
+        private authHttp: AuthHeader,
+        private http: Http
+        ) {
         this.getFromServer(this.currPage).subscribe((courses) => {
             this.courses.next({ page: this.currPage, items: courses });
         });
@@ -55,39 +60,34 @@ export class CoursesService {
 
         requestOptions.url = this.url + '/delete';
         requestOptions.method = RequestMethod.Post;
-        requestOptions.body = JSON.stringify({id: id});
+        requestOptions.body = JSON.stringify({id});
+        requestOptions.headers = this.authHttp.setAuthHeader();
         request = new Request(requestOptions);
 
         this.http.request(request).map((res) => res.json()).subscribe((result) => {
-
-            console.log(result);
-
             this.getFromServer().subscribe((courses) => {
                 this.courses.next({ page: this.currPage, items: courses });
             });
         });
-        // let courses = this.getCourses();
-        // courses.items = courses.items.filter((itm) => itm.id !== id);
-        // this.courses.next(courses);
     }
 
     public getNext(query: string = '') {
         this.getFromServer(this.currPage + 1, query).subscribe((courses) => {
-            var page = this.currPage + 1;
+            let page = this.currPage + 1;
             if (courses.length) {
                 this.currPage = page;
             }
-            this.courses.next({ page: page, items: courses });
+            this.courses.next({ page, items: courses });
         });
     }
 
     public getPrev(query: string = '') {
         this.getFromServer(this.currPage - 1, query).subscribe((courses) => {
-            var page = this.currPage - 1;
+            let page = this.currPage - 1;
             if (courses.length) {
                 this.currPage = page;
             }
-            this.courses.next({ page: page, items: courses });
+            this.courses.next({ page, items: courses });
         });
     }
 

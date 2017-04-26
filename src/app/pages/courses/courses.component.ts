@@ -70,12 +70,6 @@ export class CoursesComponent implements OnInit, OnDestroy {
 			this.loading.open();
 			this.coursesService.getFilteredByName($event.q);
 		}
-		/*
-		this.courseItems = this.filterNames.transform(
-			this.courseItems,
-			this.currentFilter
-		);
-		*/
 	}
 
 	public getPrev() {

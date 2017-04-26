@@ -33,11 +33,16 @@ import { CourseEditModule } from  './pages/course-edit';
 
 // Services
 
-import { CoursesService, LoginService, ModalService, LoadingService } from './core/services';
+import {
+	CoursesService,
+	LoginService, AuthHeader,
+	ModalService, LoadingService
+} from './core/services';
 import { AuthGuard } from './core/guards';
 
 // Application wide providers
 const APP_PROVIDERS = [
+	AuthHeader,
 	CoursesService,
 	LoginService,
 	ModalService,

@@ -12,8 +12,8 @@ export class LoginService {
     public authed = new BehaviorSubject<boolean>(false);
     public authed$ = this.authed.asObservable();
     public username;
-    private token: string;
-    private url: string = 'http://localhost:3010/auth'; // 'http://178.62.199.58:3010/auth';
+    public token: string;
+    private url: string = 'http://178.62.199.58:3010/auth';
 
     constructor(private http: Http) {
         let cred = localStorage.getItem('utoken');
