@@ -8,12 +8,14 @@ import { CoursesModule } from '../courses/courses.module';
 import { CourseEditComponent } from './course-edit.component';
 import { DateFieldComponent } from './date-field/date-field.component';
 import { DurationFieldComponent } from './duration-field/duration-field.component';
+import { McheckFieldComponent } from './mcheck-field/mcheck-field.component';
 
 @NgModule({
 	declarations: [
 		CourseEditComponent,
 		DateFieldComponent,
-		DurationFieldComponent
+		DurationFieldComponent,
+		McheckFieldComponent
 	],
 	imports: [
 		FormsModule,

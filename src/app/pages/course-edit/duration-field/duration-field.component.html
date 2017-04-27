@@ -1,1 +1,1 @@
-<input type="text" #inp [(ngModel)]="val" (change)="valueChanged()" (focus)="inp.select()"> {{val | myFormatMinutes}}
+<input type="text" #inp [ngModel]="currentValue" (change)="setValue($event)" (input)="setValue($event)" (focus)="inp.select()"> {{currentValue | myFormatMinutes}}

@@ -1,33 +1,50 @@
 <div class="course-form">
-	<div class="form-field">
-		<label>Title</label>
-		<input type="text" [(ngModel)]="name">
-	</div>
-	<div class="form-field">
-		<label>Description</label>
-		<textarea [(ngModel)]="description"></textarea>
-	</div>
-	<div class="form-field">
-		<label>Date</label>
-		<date-field [date]="date" (setDate)="setDate($event)"></date-field>
-	</div>
-	<div class="form-field">
-		<label>Duration</label>
-		<duration-field [val]="duration" (setDuration)="setDuration($event)"></duration-field>
-	</div>
-	<div class="form-field">
-		<label>Authors</label>
-		<select [(ngModel)]="authors" multiple size="4">
-			<option value="">Smith</option>
-			<option value="">Johnson</option>
-			<option value="">Williams</option>
-			<option value="">Brown</option>
-			<option value="">Miller</option>
-		</select>
-	</div>
+	<form [formGroup]="formEdit" (ngSubmit)="submitCourse(formEdit)">
+		<div class="form-field">
+			<label>Title</label>
+			<input type="text" formControlName="title">
+		</div>
+		
+		<div class="form-field">
+			<label>Description</label>
+			<textarea formControlName="description"></textarea>
+		</div>
+		<div class="form-field">
+			<label>Date</label>
+			<date-field formControlName="date"></date-field>
+		</div>
+		<div class="form-field">
+			<label>Duration</label>
+			<duration-field formControlName="duration"></duration-field>
+		</div>
+		<div class="form-field">
+			<label>Authors</label>
+			<!--
+			<mcheck-field formGroupName="authors" [options]="authorsList"></mcheck-field>
+			-->
+			<div class="chk-wrap" formGroupName="authorsList">
+				<div *ngFor="let author of authorsList; let i = index">
+					<label>
+					<span>
+						<input type="checkbox" name="" id="" formControlName="author.{{author.name}}">
+						{{author.name}}
+					</span>
+					</label>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="form-action">
+			<button class="btn-primary" type="submit" [disabled]="formEdit.invalid">Save</button>
+			<button class="btn-secondary" (click)="cancel()">Cancel</button>
+		</div>
+
+		<div style="display: flex; justify-content: space-between;">
+			<pre style="width: 49%;">{{formErrors | json}}</pre>
+			<pre style="width: 49%;">{{formEdit.value | json}}</pre>
+
+		</div>
+	</form>
 	
-	<div class="form-action">
-		<button class="btn-primary" (click)="submitCourse()">Save</button>
-		<button class="btn-secondary" (click)="cancel()">Cancel</button>
-	</div>
 </div>

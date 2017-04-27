@@ -1,0 +1,14 @@
+
+<fieldset class="chk-wrap" [formGroup]="mchks">
+    <input type="text" formControlName="title">
+    <div>
+        <div *ngFor="let option of options2; let i = index">
+            <label>
+            <span formGroupName="{{i}}">
+                <input type="checkbox" name="" id="" formControlName="{{option.name}}">
+                {{option.name}} 11
+            </span>
+            </label>
+        </div>
+    </div>
+</fieldset>

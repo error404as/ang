@@ -1,3 +1,7 @@
 @import "./variables/colors.scss";
 
 .container {padding-bottom: 70px;}
+.btn-primary.disabled, .btn-primary:disabled {
+	background: #999;
+    border-color: #999;
+}
