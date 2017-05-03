@@ -2,6 +2,11 @@ import {
 	Component, ViewEncapsulation,
 	ChangeDetectionStrategy, ChangeDetectorRef,
 	OnInit, OnDestroy } from '@angular/core';
+import {
+	FormControl, FormGroup,
+	FormBuilder, Validators
+} from '@angular/forms';
+
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -17,12 +22,14 @@ import { LoginService, LoadingService } from '../../core/services';
 })
 export class LoginComponent implements OnInit, OnDestroy {
 	public subscription: Subscription;
+	public formLogin: FormGroup;
 
 	constructor(
 		private loginService: LoginService,
 		private router: Router,
 		private loading: LoadingService,
-		private changeDetector: ChangeDetectorRef
+		private changeDetector: ChangeDetectorRef,
+		private formBuilder: FormBuilder
 		) {
 		console.log('Page Login constructor');
 		if (loginService.isAuthenticated()) {
@@ -30,9 +37,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	public login(user: string, password: string) {
+	public login(form: FormGroup) {
 		this.loading.open();
-		this.loginService.logInServer(user, password).subscribe((res) => {
+		this.loginService.logInServer(form.value.username, form.value.password).subscribe((res) => {
 			console.log(res);
 			this.loading.close();
 			this.router.navigateByUrl('/');
@@ -51,6 +58,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 				this.router.navigateByUrl('/');
 			}
 			this.changeDetector.markForCheck();
+		});
+
+		this.formLogin = this.formBuilder.group({
+			username: ['', Validators.required],
+			password: ['', Validators.required]
 		});
 	}
 

@@ -24,7 +24,7 @@ export class McheckFieldComponent implements ControlValueAccessor, OnInit {
 
 	constructor(private formBuilder: FormBuilder) { }
 
-public ngOnInit() {
+	public ngOnInit() {
 		console.log('oninit');
 		console.log(this.options);
 		let options = this.formBuilder.group({});

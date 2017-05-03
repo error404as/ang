@@ -34,7 +34,6 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 		{ id: 4, name: 'Brown' },
 		{ id: 5, name: 'Miller' }
 	];
-	private categories = [{ name: 'one' }, { name: 'two' }, { name: 'threeve' }];
 
 	constructor(
 		private router: Router,

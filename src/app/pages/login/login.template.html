@@ -1,13 +1,15 @@
 <div class="login-form">
-	<div class="form-field">
-		<label>Login</label>
-		<input type="text" [(ngModel)]="username">
-	</div>
-	<div class="form-field">
-		<label>Password</label>
-		<input type="password" [(ngModel)]="password">
-	</div>
-	<div class="form-action">
-		<button class="btn-primary" (click)="login(username, password)">Enter</button>
-	</div>
+	<form [formGroup]="formLogin" (ngSubmit)="login(formLogin)">
+		<div class="form-field">
+			<label>Login</label>
+			<input type="text" formControlName="username">
+		</div>
+		<div class="form-field">
+			<label>Password</label>
+			<input type="password" formControlName="password">
+		</div>
+		<div class="form-action">
+			<button class="btn-primary" type="submit" [disabled]="formLogin.invalid">Enter</button>
+		</div>
+	</form>
 </div>
