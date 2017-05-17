@@ -8,7 +8,7 @@
 		<div class="description">{{course.description}}</div>
 	</div>
 	<div class="side" *ngIf="isLoggedin">
-		<button type="button" class="btn" (click)="updateCourse(course)">Edit course</button>
+		<button type="button" class="btn" [routerLink]="['courses', course.id]">View course</button>
 		<button type="button" class="btn" (click)="deleteCourse(course.id)">Delete</button>
 	</div>
 </div>

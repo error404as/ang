@@ -16,7 +16,10 @@ import { AuthHeader } from '../../services';
 export class CoursesService {
     public courses = new BehaviorSubject<CoursesList>({ page: 0, items: [] });
     public courses$ = this.courses.asObservable();
-    public courseById: CourseItem2;
+    public courseById = new BehaviorSubject<CourseItem2>({
+        id: 0, name: '', length: 0, date: null, isTopRated: false, description: ''
+    });
+    public courseById$= this.courseById.asObservable();
     private currPage = 0;
     private perpage = 5;
 
@@ -40,14 +43,12 @@ export class CoursesService {
     public getCourses(): CoursesList {
         return this.courses.getValue();
     }
-    public getById(id: number): CourseItem2[] {
-        this.getFromServerById(id).subscribe((item) => {
-            this.courseById = item;
-        }, (err) => {
-            this.courseById = null;
+    public getById(id: number) {
+        this.getFromServerById(id).subscribe((course) => {
+            this.courseById.next(course);
         });
-        return this.getCourses().items.filter((itm) => itm.id === id);
     }
+
     public updateCourse(course: CourseItem2) {
         // let old = this.getById(course.id);
         // if (old.length === 1) {

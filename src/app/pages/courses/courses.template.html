@@ -2,7 +2,7 @@
 <div class="courses-controls">
 	<find-course (doFilter)="filterByNameField($event)"></find-course>
 	<div class="side" *ngIf="isLoggedin">
-		<button type="button" class="btn" [routerLink]="'add-course'">Add course</button>
+		<button type="button" class="btn" [routerLink]="'courses/new'">Add course</button>
 	</div>
 </div>
 

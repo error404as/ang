@@ -1,0 +1,7 @@
+<div class="course-view">
+    <h2>#{{courseID}}<br>{{courseItem.name}}</h2>
+    <p>{{courseItem.description}}</p>
+    <ul>
+        <li *ngFor="let a of courseItem.authors">{{a.firstName}} {{a.lastName}}</li>
+    </ul>
+</div>
