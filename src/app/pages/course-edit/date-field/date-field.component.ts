@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, forwardRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, forwardRef, ChangeDetectorRef } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
@@ -18,7 +18,7 @@ export class DateFieldComponent implements ControlValueAccessor {
 	public currentValue: any;
 	public isDisabled: boolean = false;
 
-	constructor() {
+	constructor(private changeDetector: ChangeDetectorRef) {
 	}
 
 	public setValue(item) {
@@ -41,7 +41,8 @@ export class DateFieldComponent implements ControlValueAccessor {
 	}
 	public writeValue(value: any) {
 		if (value !== this.currentValue) {
-			this.currentValue = value instanceof Date ? this.convertDate(value) : value;
+			this.currentValue = this.convertDate(value);
+			this.changeDetector.markForCheck();
 		}
 	}
 	public setDisabledState(isDisabled) {
@@ -49,6 +50,10 @@ export class DateFieldComponent implements ControlValueAccessor {
 	}
 	public convertDate(value) {
 		if (typeof value === 'string') {
+			if (value.indexOf('T') !== -1){
+				value = new Date(value);
+				return new DatePipe('en-EN').transform(value, 'dd/MM/yyyy');
+			}
 			let d = value.split('/').reverse().map((n: any) => n * 1);
 			let date = new Date(d[0], d[1] - 1, d[2]);
 			return date.toString() === 'Invalid Date' ? null : date;

@@ -40,6 +40,23 @@ export class CoursesService {
         course.id = nextId;
         return this.addCourse(course);
     }
+    public updateCourse(course: CourseItem2): Promise<number> {
+        return new Promise((resolve) => {
+            console.log('Updating course...');
+            setTimeout(() => {
+                let courses = this.getCourses();
+                courses.items.forEach((itm, ind, arr) => {
+                    if (itm.id === course.id) {
+                        console.log('found ')
+                        console.log(itm)
+                        arr[ind] = course;
+                    }
+                });
+                this.courses.next(courses);
+                resolve(course.id);
+            }, 300);
+        });
+    }
     public getCourses(): CoursesList {
         return this.courses.getValue();
     }
@@ -47,13 +64,6 @@ export class CoursesService {
         this.getFromServerById(id).subscribe((course) => {
             this.courseById.next(course);
         });
-    }
-
-    public updateCourse(course: CourseItem2) {
-        // let old = this.getById(course.id);
-        // if (old.length === 1) {
-            // old[0] = course;
-        // }
     }
     public deleteCourse(id: number) {
         let requestOptions = new RequestOptions();
@@ -136,7 +146,7 @@ export class CoursesService {
                 courses.items.push(course);
                 this.courses.next(courses);
                 resolve(course.id);
-            }, 500);
+            }, 300);
         });
     }
 }

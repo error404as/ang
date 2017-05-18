@@ -40,10 +40,9 @@
 			<button class="btn-secondary" (click)="cancel()">Cancel</button>
 		</div>
 
-		<div style="display: flex; justify-content: space-between;">
+		<div style="display: none; justify-content: space-between;">
 			<pre style="width: 49%;"><b>Errors:</b><br>{{formErrors | json}}</pre>
 			<pre style="width: 49%;"><b>Form value:</b><br>{{formEdit.value | json}}</pre>
-
 		</div>
 	</form>
 	

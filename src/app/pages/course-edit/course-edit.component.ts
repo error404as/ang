@@ -1,9 +1,10 @@
 import {
 	Component, ViewEncapsulation,
-	ChangeDetectionStrategy,
+	ChangeDetectionStrategy, ChangeDetectorRef,
 	OnInit, OnDestroy
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 import {
 	FormControl, FormGroup, FormArray,
 	FormBuilder, Validators
@@ -21,10 +22,6 @@ import { CourseItem2 } from '../../core/entities';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CourseEditComponent implements OnInit, OnDestroy {
-	public name: string = '';
-	public description: string = '';
-	public date: string = '';
-	public duration: number;
 	public formEdit: FormGroup;
 	public formErrors;
 	public authorsList = [
@@ -34,20 +31,27 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 		{ id: 4, name: 'Brown' },
 		{ id: 5, name: 'Miller' }
 	];
+	public courseObserver: Subscription;
+	public course: CourseItem2 = {
+        id: 0, name: '', length: 0, date: new Date(), isTopRated: false, description: ''
+    };
+	public courseID: number;
 
 	constructor(
 		private router: Router,
 		private loading: LoadingService,
 		private coursesService: CoursesService,
 		private modal: ModalService,
-		private formBuilder: FormBuilder
+		private formBuilder: FormBuilder,
+		private changeDetector: ChangeDetectorRef,
+		private activated: ActivatedRoute,
 	) { }
 
 	public submitCourse(form) {
 		this.getErrors();
 
 		let course: CourseItem2 = {
-			id: 0,
+			id: this.courseID || 0,
 			name: form.value.title,
 			length: form.value.duration * 1 || 0,
 			date: form.value.date || new Date(),
@@ -57,10 +61,17 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 		console.log('Saving Course');
 		console.log(course);
 		this.loading.open();
-		this.coursesService.createCourse(course).then((id) => {
-			this.loading.close();
-			this.router.navigateByUrl('');
-		});
+		if (this.courseID) {
+			this.coursesService.updateCourse(course).then((id) => {
+				this.loading.close();
+				this.router.navigateByUrl('');
+			});
+		} else {
+			this.coursesService.createCourse(course).then((id) => {
+				this.loading.close();
+				this.router.navigateByUrl('');
+			});
+		}
 
 	}
 
@@ -72,6 +83,20 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 	public ngOnInit() {
 		console.log('Page Edit Course');
 
+		this.courseID = this.activated.snapshot.params['id'] * 1;
+		if (this.courseID) {
+			this.courseObserver = this.coursesService.courseById$.subscribe((course) => {
+				this.course = course;
+				this.init();
+				this.changeDetector.markForCheck();
+			});
+			this.coursesService.getById( this.courseID );
+		} else {
+			this.init();
+		}
+	}
+
+	public init() {
 		let authors = this.formBuilder.array(
 			this.authorsList.map((author) => this.formBuilder.group({
 				[author.name]: false
@@ -81,12 +106,11 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 		this.authorsList.forEach((author) => {
 			authors2.addControl('author.' + author.name, new FormControl(false));
 		});
-
 		this.formEdit = this.formBuilder.group({
-			title: ['', [Validators.required, Validators.maxLength(50)]],
-			description: ['', [Validators.required, Validators.maxLength(500)]],
-			date: [new Date(), Validators.required],
-			duration: [null, Validators.pattern('\\d+')],
+			title: [this.course.name, [Validators.required, Validators.maxLength(50)]],
+			description: [this.course.description, [Validators.required, Validators.maxLength(500)]],
+			date: [this.course.date, Validators.required],
+			duration: [this.course.length, Validators.pattern('\\d+')],
 			authorsList: authors2
 		});
 		this.formEdit.valueChanges.subscribe((data) => {
