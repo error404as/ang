@@ -1,8 +1,8 @@
-import { CourseItem2 } from '.';
+import { CourseItem } from '.';
 
 export class CoursesList {
      constructor(
           public page: number,
-          public items: CourseItem2[]
+          public items: CourseItem[]
       ) { }
 }

@@ -9,6 +9,7 @@ import {
 
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { Store } from '@ngrx/store';
 
 import { LoginService, LoadingService } from '../../core/services';
 
@@ -29,7 +30,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 		private router: Router,
 		private loading: LoadingService,
 		private changeDetector: ChangeDetectorRef,
-		private formBuilder: FormBuilder
+		private formBuilder: FormBuilder,
+		private store: Store<any>
 		) {
 		console.log('Page Login constructor');
 		if (loginService.isAuthenticated()) {
@@ -52,9 +54,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 	public ngOnInit() {
 		console.log('Page login');
-		this.subscription = this.loginService.authed$.subscribe((isAuth) => {
+		this.subscription = this.store.select<any>('auth').subscribe((state) => {
 			this.loading.close();
-			if (isAuth) {
+			if (state.logged) {
 				this.router.navigateByUrl('/');
 			}
 			this.changeDetector.markForCheck();
@@ -67,6 +69,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnDestroy() {
-		// unsubscribe here
+		this.subscription.unsubscribe();
 	}
 }

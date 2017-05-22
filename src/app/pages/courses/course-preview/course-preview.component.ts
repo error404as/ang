@@ -2,9 +2,9 @@ import { Component, Input, Output, EventEmitter,
 	ChangeDetectionStrategy, ChangeDetectorRef,
 	OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+import { Store } from '@ngrx/store';
 
-import { LoginService } from '../../../core/services';
-import { CourseItem, CourseItem2 } from '../../../core/entities';
+import { CourseItem } from '../../../core/entities';
 
 @Component({
 	selector: 'course-preview',
@@ -15,14 +15,22 @@ import { CourseItem, CourseItem2 } from '../../../core/entities';
 export class CoursePreviewComponent implements OnInit, OnDestroy {
 	public subscription: Subscription;
 	public isLoggedin = false;
-	@Input() public course: CourseItem2;
+	@Input() public course: CourseItem;
 	@Output() public deleteItem = new EventEmitter();
 	@Output() public updateItem = new EventEmitter();
 
-	constructor(private loginService: LoginService, private changeDetector: ChangeDetectorRef) {
+	constructor(
+		private changeDetector: ChangeDetectorRef,
+		private store: Store<any>
+		) {
+		this.subscription = this.store.select<any>('auth').subscribe((state) => {
+			this.isLoggedin = state.logged;
+			this.changeDetector.markForCheck();
+		});
+
 	}
 
-	public updateCourse(course: CourseItem2) {
+	public updateCourse(course: CourseItem) {
 		this.updateItem.emit({ data: course });
 	}
 
@@ -31,10 +39,7 @@ export class CoursePreviewComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnInit() {
-		this.subscription = this.loginService.authed$.subscribe((isAuth) => {
-			this.isLoggedin = isAuth;
-			this.changeDetector.markForCheck();
-		});
+
 	}
 
 	public ngOnDestroy() {

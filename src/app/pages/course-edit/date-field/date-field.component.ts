@@ -50,7 +50,7 @@ export class DateFieldComponent implements ControlValueAccessor {
 	}
 	public convertDate(value) {
 		if (typeof value === 'string') {
-			if (value.indexOf('T') !== -1){
+			if (value.indexOf('T') !== -1) {
 				value = new Date(value);
 				return new DatePipe('en-EN').transform(value, 'dd/MM/yyyy');
 			}

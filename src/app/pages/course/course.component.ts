@@ -5,9 +5,10 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { Store } from '@ngrx/store';
 
 import { CoursesService } from '../../core/services';
-import { CourseItem2 } from '../../core/entities';
+import { CourseItem } from '../../core/entities';
 
 @Component({
 	selector: 'course',
@@ -19,7 +20,7 @@ import { CourseItem2 } from '../../core/entities';
 })
 export class CourseComponent implements OnInit, OnDestroy {
 	public courseObserver: Subscription;
-	public courseItem: CourseItem2;
+	public courseItem: CourseItem;
 	public courseID: number;
 
 	constructor(
@@ -27,11 +28,12 @@ export class CourseComponent implements OnInit, OnDestroy {
 		private coursesService: CoursesService,
 		private changeDetector: ChangeDetectorRef,
 		private activated: ActivatedRoute,
+		private store: Store<any>
 	) { }
 
 	public ngOnInit() {
 		this.courseID = this.activated.snapshot.params['id'];
-		this.courseObserver = this.coursesService.courseById$.subscribe((course) => {
+		this.courseObserver = this.store.select<any>('course').subscribe((course) => {
 			this.courseItem = course;
 			this.changeDetector.markForCheck();
 		});
@@ -39,6 +41,6 @@ export class CourseComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnDestroy() {
-		// unsubscribe here
+		this.courseObserver.unsubscribe();
 	}
 }

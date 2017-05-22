@@ -9,9 +9,10 @@ import {
 	FormControl, FormGroup, FormArray,
 	FormBuilder, Validators
 } from '@angular/forms';
+import { Store } from '@ngrx/store';
 
 import { CoursesService, LoadingService, ModalService } from '../../core/services';
-import { CourseItem2 } from '../../core/entities';
+import { CourseItem } from '../../core/entities';
 
 @Component({
 	selector: 'course-edit',
@@ -32,7 +33,7 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 		{ id: 5, name: 'Miller' }
 	];
 	public courseObserver: Subscription;
-	public course: CourseItem2 = {
+	public course: CourseItem = {
         id: 0, name: '', length: 0, date: new Date(), isTopRated: false, description: ''
     };
 	public courseID: number;
@@ -45,12 +46,13 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 		private formBuilder: FormBuilder,
 		private changeDetector: ChangeDetectorRef,
 		private activated: ActivatedRoute,
+		private store: Store<any>
 	) { }
 
 	public submitCourse(form) {
 		this.getErrors();
 
-		let course: CourseItem2 = {
+		let course: CourseItem = {
 			id: this.courseID || 0,
 			name: form.value.title,
 			length: form.value.duration * 1 || 0,
@@ -85,7 +87,7 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 
 		this.courseID = this.activated.snapshot.params['id'] * 1;
 		if (this.courseID) {
-			this.courseObserver = this.coursesService.courseById$.subscribe((course) => {
+			this.courseObserver = this.store.select<any>('course').subscribe((course) => {
 				this.course = course;
 				this.init();
 				this.changeDetector.markForCheck();
@@ -133,6 +135,8 @@ export class CourseEditComponent implements OnInit, OnDestroy {
 	}
 
 	public ngOnDestroy() {
-		// unsubscribe here
+		if (typeof this.courseObserver !== 'undefined') {
+			this.courseObserver.unsubscribe();
+		}
 	}
 }

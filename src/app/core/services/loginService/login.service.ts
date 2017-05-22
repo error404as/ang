@@ -5,17 +5,16 @@ import { Http, Response, Request, RequestOptions, Headers,
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import { Subscription } from 'rxjs/Subscription';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class LoginService {
 
-    public authed = new BehaviorSubject<boolean>(false);
-    public authed$ = this.authed.asObservable();
-    public username;
+    public authed: boolean = false;
     public token: string;
     private url: string = 'http://178.62.199.58:3010/auth';
 
-    constructor(private http: Http) {
+    constructor(private http: Http, private store: Store<any>) {
         let cred = localStorage.getItem('utoken');
         if (cred) {
             this.token = cred;
@@ -57,23 +56,25 @@ export class LoginService {
     }
 
     public logOut() {
-        console.log('LoginService: logout');
-        this.username = '';
-        this.authed.next(false);
+        this.authed = false;
+        this.store.dispatch({type: 'LOGOUT'});
         localStorage.removeItem('utoken');
     }
 
     public getUserInfo() {
         this.userInfoServer().subscribe((res) => {
-            this.username = res.name.first + ' ' + res.name.last;
-            this.authed.next(true);
+            this.authed = true;
+            this.store.dispatch({type: 'LOGIN', payload: {
+                name: res.name.first + ' ' + res.name.last,
+                logged: true
+            }});
         }, (err) => {
             this.logOut();
         });
     }
 
     public isAuthenticated(): boolean {
-        return this.authed.getValue();
+        return this.authed;
     }
 
 }

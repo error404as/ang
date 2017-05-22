@@ -7,8 +7,9 @@ import {
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
+import { Store } from '@ngrx/store';
 
-import { CourseItem2, CoursesList } from '../../entities';
+import { CourseItem, CoursesList } from '../../entities';
 
 import { AuthHeader } from '../../services';
 
@@ -16,10 +17,7 @@ import { AuthHeader } from '../../services';
 export class CoursesService {
     public courses = new BehaviorSubject<CoursesList>({ page: 0, items: [] });
     public courses$ = this.courses.asObservable();
-    public courseById = new BehaviorSubject<CourseItem2>({
-        id: 0, name: '', length: 0, date: null, isTopRated: false, description: ''
-    });
-    public courseById$= this.courseById.asObservable();
+    public coursesList: CoursesList = { page: 0, items: [] };
     private currPage = 0;
     private perpage = 5;
 
@@ -27,32 +25,28 @@ export class CoursesService {
 
     constructor(
         private authHttp: AuthHeader,
-        private http: Http
+        private http: Http,
+        private store: Store<any>
         ) {
         this.getFromServer(this.currPage).subscribe((courses) => {
-            this.courses.next({ page: this.currPage, items: courses });
+            this.store.dispatch({ type: 'SET_COURSES_LIST', payload: {
+                page: this.currPage,
+                items: courses
+            }});
         });
     }
 
-    public createCourse(course: CourseItem2): Promise<number> {
+    public createCourse(course: CourseItem): Promise<number> {
         let courses = this.getCourses();
         let nextId = courses.items.length ? Math.max(...courses.items.map((itm) => itm.id)) + 1 : 0;
         course.id = nextId;
         return this.addCourse(course);
     }
-    public updateCourse(course: CourseItem2): Promise<number> {
+    public updateCourse(course: CourseItem): Promise<number> {
         return new Promise((resolve) => {
             console.log('Updating course...');
             setTimeout(() => {
-                let courses = this.getCourses();
-                courses.items.forEach((itm, ind, arr) => {
-                    if (itm.id === course.id) {
-                        console.log('found ')
-                        console.log(itm)
-                        arr[ind] = course;
-                    }
-                });
-                this.courses.next(courses);
+                this.store.dispatch({ type: 'UPDATE_COURSE', payload: course});
                 resolve(course.id);
             }, 300);
         });
@@ -62,7 +56,7 @@ export class CoursesService {
     }
     public getById(id: number) {
         this.getFromServerById(id).subscribe((course) => {
-            this.courseById.next(course);
+            this.store.dispatch({ type: 'SET_COURSE', payload: course });
         });
     }
     public deleteCourse(id: number) {
@@ -77,7 +71,10 @@ export class CoursesService {
 
         this.http.request(request).map((res) => res.json()).subscribe((result) => {
             this.getFromServer().subscribe((courses) => {
-                this.courses.next({ page: this.currPage, items: courses });
+                this.store.dispatch({ type: 'SET_COURSES_LIST', payload: {
+                    page: this.currPage,
+                    items: courses
+                }});
             });
         });
     }
@@ -88,7 +85,11 @@ export class CoursesService {
             if (courses.length) {
                 this.currPage = page;
             }
-            this.courses.next({ page, items: courses });
+            this.store.dispatch({ type: 'SET_COURSES_LIST', payload: {
+                page,
+                items: courses
+            }});
+            // this.courses.next({ page, items: courses });
         });
     }
 
@@ -98,11 +99,15 @@ export class CoursesService {
             if (courses.length) {
                 this.currPage = page;
             }
-            this.courses.next({ page, items: courses });
+            this.store.dispatch({ type: 'SET_COURSES_LIST', payload: {
+                page,
+                items: courses
+            }});
+            // this.courses.next({ page, items: courses });
         });
     }
 
-    public getFromServer(qStart: number = 0, query: string = ''): Observable<CourseItem2[]> {
+    public getFromServer(qStart: number = 0, query: string = ''): Observable<CourseItem[]> {
         let requestOptions = new RequestOptions();
         let request: Request;
         let urlParams: URLSearchParams = new URLSearchParams();
@@ -123,11 +128,14 @@ export class CoursesService {
     public getFilteredByName(query: string) {
         this.getFromServer(0, query).subscribe((courses) => {
             this.currPage = 0;
-            this.courses.next({ page: this.currPage, items: courses });
+            this.store.dispatch({ type: 'SET_COURSES_LIST', payload: {
+                page: this.currPage,
+                items: courses
+            }});
         });
     }
 
-    public getFromServerById(id: number): Observable<CourseItem2> {
+    public getFromServerById(id: number): Observable<CourseItem> {
         let requestOptions = new RequestOptions();
         let request: Request;
 
@@ -138,13 +146,11 @@ export class CoursesService {
         return this.http.request(request).map((res) => res.json());
     }
 
-    private addCourse(course: CourseItem2): Promise<number> {
+    private addCourse(course: CourseItem): Promise<number> {
         return new Promise((resolve) => {
             console.log('Adding course...');
             setTimeout(() => {
-                let courses = this.getCourses();
-                courses.items.push(course);
-                this.courses.next(courses);
+                this.store.dispatch({ type: 'ADD_COURSE', payload: course});
                 resolve(course.id);
             }, 300);
         });

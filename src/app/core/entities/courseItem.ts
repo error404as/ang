@@ -3,9 +3,9 @@ export class CourseItem {
     constructor(
         public id: number,
         public name: string,
-        public duration: number,
+        public length: number,
         public date: any,
-        public topRated: boolean,
+        public isTopRated: boolean,
         public description: string
     ) {
 

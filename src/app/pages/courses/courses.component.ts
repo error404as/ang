@@ -4,9 +4,10 @@ import {
 	OnInit, OnDestroy
 } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+import { Store } from '@ngrx/store';
 
 import { CoursesService, ModalService, LoginService, LoadingService } from '../../core/services';
-import { CourseItem, CourseItem2 } from '../../core/entities';
+import { CourseItem } from '../../core/entities';
 import { FilterByNamePipe } from '../../core/pipes';
 
 @Component({
@@ -18,9 +19,9 @@ import { FilterByNamePipe } from '../../core/pipes';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CoursesComponent implements OnInit, OnDestroy {
-	public coursesObserver: Subscription;
-	public authObserver: Subscription;
-	public courseItems: CourseItem2[] = [];
+	public coursesSubscription: Subscription;
+	public authSubscription: Subscription;
+	public courseItems: CourseItem[] = [];
 	public isLoggedin = false;
 	public currPage = 0;
 	public hasNext = true;
@@ -34,9 +35,33 @@ export class CoursesComponent implements OnInit, OnDestroy {
 		private loginService: LoginService,
 		private loading: LoadingService,
 		private changeDetector: ChangeDetectorRef,
-		private ngZone: NgZone
+		private ngZone: NgZone,
+		private store: Store<any>
 	) {
 		this.loading.open();
+
+		this.coursesSubscription = this.store.select<any>('courses').subscribe((state) => {
+			this.loading.close();
+			console.log(state);
+			if (state.items.length) {
+				this.currPage = state.page;
+				this.hasNext = true;
+				this.courseItems = state.items;
+			} else {
+				this.hasNext = false;
+
+				if (state.page === 0) {
+					this.currPage = state.page;
+					this.courseItems = state.items;
+				}
+			}
+			this.changeDetector.markForCheck();
+		});
+
+		this.authSubscription = this.store.select<any>('auth').subscribe((state) => {
+			this.isLoggedin = state.logged;
+			this.changeDetector.markForCheck();
+		});
 
 		// ngZone shows nothing here..
 		this.ngZone.onUnstable.subscribe(() => {
@@ -84,39 +109,10 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
 	public ngOnInit() {
 		console.log('Page courses init');
-		this.coursesObserver = this.coursesService.courses$.subscribe((courses) => {
-			this.loading.close();
-			console.log(courses);
-			if (courses.items.length) {
-				this.currPage = courses.page;
-				this.hasNext = true;
-				this.courseItems = courses.items;
-			} else {
-				this.hasNext = false;
-
-				if (courses.page === 0) {
-					this.currPage = courses.page;
-					this.courseItems = courses.items;
-				}
-			}
-			this.changeDetector.markForCheck();
-		});
-
-		/*
-		this.coursesObserver = this.coursesService.getFromServer(0, 10).subscribe((courses) => {
-			this.courseItems = courses;
-			this.changeDetector.markForCheck();
-		});
-		*/
-		this.authObserver = this.loginService.authed$.subscribe((isAuth) => {
-			this.isLoggedin = isAuth;
-			this.changeDetector.markForCheck();
-		});
-
 	}
 
 	public ngOnDestroy() {
-		this.coursesObserver.unsubscribe();
-		this.authObserver.unsubscribe();
+		this.authSubscription.unsubscribe();
+		this.coursesSubscription.unsubscribe();
 	}
 }

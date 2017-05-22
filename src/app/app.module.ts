@@ -32,6 +32,10 @@ import { CoursesModule } from  './pages/courses';
 import { CourseEditModule } from  './pages/course-edit';
 import { CourseModule } from  './pages/course';
 
+// redux
+import { StoreModule } from '@ngrx/store';
+import { authReducer, coursesReducer, courseReducer } from './core/reducer';
+
 // Services
 
 import {
@@ -72,7 +76,12 @@ const APP_PROVIDERS = [
 		CoursesModule,
 		CourseEditModule,
 		LoginModule,
-		ModalModule
+		ModalModule,
+		StoreModule.provideStore({
+			auth: authReducer,
+			courses: coursesReducer,
+			course: courseReducer
+		})
 	],
 	providers: [ // expose our Services and Providers into Angular's dependency injection
 		ENV_PROVIDERS,
